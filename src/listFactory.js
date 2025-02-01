@@ -3,16 +3,16 @@ import { Node } from './nodeFactory.js';
 function LinkedList() {
   let headNode = null;
 
-  const append = (value) => {
+  const append = (key, value) => {
     let currentNode = headNode;
 
     if (headNode === null) {
-      headNode = Node(value);
+      headNode = Node(key, value);
     }
 
     while (currentNode !== null) {
       if (currentNode.nextNode === null) {
-        currentNode.nextNode = Node(value);
+        currentNode.nextNode = Node(key, value);
         break;
       } else {
         currentNode = currentNode.nextNode;
@@ -20,10 +20,10 @@ function LinkedList() {
     }
   };
 
-  const prepend = (value) => {
+  const prepend = (key, value) => {
     let headCopy = headNode;
 
-    headNode = Node(value);
+    headNode = Node(key, value);
     headNode.nextNode = headCopy;
   };
 
@@ -110,6 +110,24 @@ function LinkedList() {
     return false;
   };
 
+  const containsByKey = (key) => {
+    let currentNode = headNode;
+
+    if (headNode === null) {
+      return false;
+    }
+
+    while (currentNode !== null) {
+      if (currentNode.key === key) {
+        return true;
+      } else {
+        currentNode = currentNode.nextNode;
+      }
+    }
+
+    return false;
+  };
+
   const find = (value) => {
     let currentNode = headNode;
 
@@ -129,27 +147,80 @@ function LinkedList() {
     return null;
   };
 
-  const toString = () => {
+  const findByKey = (key) => {
+    let currentNode = headNode;
+
+    if (headNode === null) return null;
+
+    let index = 0;
+
+    while (currentNode !== null) {
+      if (currentNode.key === key) {
+        return index;
+      } else {
+        index++;
+        currentNode = currentNode.nextNode;
+      }
+    }
+
+    return null;
+  };
+
+  const allKeys = () => {
     let currentNode = headNode;
 
     if (headNode === null) {
       return 'null';
     }
 
-    let result = '';
+    let result = [];
 
     while (currentNode !== null) {
-      result += `( ${currentNode.value} ) -> `;
+      result.push(currentNode.key);
       currentNode = currentNode.nextNode;
     }
 
-    return result + 'null';
+    return result;
   };
 
-  const insertAt = (value, index) => {
+  const allValues = () => {
     let currentNode = headNode;
 
-    const newNode = Node(value);
+    if (headNode === null) {
+      return 'null';
+    }
+
+    let result = [];
+
+    while (currentNode !== null) {
+      result.push(currentNode.value);
+      currentNode = currentNode.nextNode;
+    }
+
+    return result;
+  };
+
+  const allEntries = () => {
+    let currentNode = headNode;
+
+    if (headNode === null) {
+      return 'null';
+    }
+
+    let result = [];
+
+    while (currentNode !== null) {
+      result.push([currentNode.key, currentNode.value]);
+      currentNode = currentNode.nextNode;
+    }
+
+    return result;
+  };
+
+  const insertAt = (key, value, index) => {
+    let currentNode = headNode;
+
+    const newNode = Node(key, value);
 
     if (headNode === null) {
       headNode = newNode;
@@ -175,6 +246,10 @@ function LinkedList() {
 
     if (headNode === null) return;
 
+    if (index === 0) {
+      headNode = headNode.nextNode;
+    }
+
     for (let counter = 0; counter < index; counter++) {
       if (index - 1 === counter) {
         currentNode.nextNode = currentNode.nextNode.nextNode;
@@ -194,8 +269,12 @@ function LinkedList() {
     atIndex,
     pop,
     contains,
+    containsByKey,
     find,
-    toString,
+    findByKey,
+    allKeys,
+    allValues,
+    allEntries,
     insertAt,
     removeAt,
   };
